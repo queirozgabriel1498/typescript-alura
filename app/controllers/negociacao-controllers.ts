@@ -5,6 +5,7 @@ export class NegociacaoController {
   private inputData: HTMLInputElement;
   private inputQuantidade: HTMLInputElement;
   private inputValor: HTMLInputElement;
+
   private negociacoes = new Negociacoes();
 
   constructor() {
@@ -15,6 +16,7 @@ export class NegociacaoController {
 
   adiciona() {
     const negociacao: Negociacao = this.criaNegociacao();
+    negociacao.data.setDate(2);
     this.negociacoes.adiciona(negociacao);
     const negociacoes = this.negociacoes.lista();
     console.log(negociacoes);
