@@ -1,3 +1,4 @@
+import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
 import { MensagemView } from "../views/mensagem-view.js";
@@ -9,31 +10,41 @@ export class NegociacaoController {
   private inputValor: HTMLInputElement;
 
   private negociacoes = new Negociacoes();
-  private negociacoesView = new NegociacoesView("#negociacoesView");
+  private negociacoesView = new NegociacoesView("#negociacoesView", true);
   private mensagemView = new MensagemView("#mensagemView");
 
   constructor() {
-    this.inputData = document.querySelector("#data");
-    this.inputQuantidade = document.querySelector("#quantidade");
-    this.inputValor = document.querySelector("#valor");
+    this.inputData = <HTMLInputElement>document.querySelector("#data");
+    this.inputQuantidade = document.querySelector("#quantidade") as HTMLInputElement;
+    this.inputValor = document.querySelector("#valor") as HTMLInputElement;
     this.negociacoesView.update(this.negociacoes);
   }
 
-  public adiciona() {
-    const negociacao: Negociacao = this.criaNegociacao();
+  public adiciona(): void {
+    // const negociacao: Negociacao = this.criaNegociacao();
+
+    // const negociacaoFactory: Negociacao = new Negociacao(null, 0, 0);
+    const negociacao: Negociacao = Negociacao.criaDe(
+      this.inputData.value,
+      this.inputQuantidade.value,
+      this.inputValor.value
+    );
+
+    if (!this.utilDay(negociacao.data)) {
+      this.mensagemView.update("Apenas negociações em dias úteis são aceitas.");
+      return;
+    }
+
     this.negociacoes.adiciona(negociacao);
     this.limparFormulario();
     this.atualizaView();
   }
 
-  private criaNegociacao(): Negociacao {
-    const exp = /-/g;
-    const date = new Date(this.inputData.value.replace(exp, ","));
-    const quantity = parseInt(this.inputQuantidade.value);
-    const value = parseInt(this.inputValor.value);
-
-    // Instance Negociacao.
-    return new Negociacao(date, quantity, value);
+  private utilDay(date: Date) {
+    return (
+      date.getDay() > DiasDaSemana.DOMINGO &&
+      date.getDay() < DiasDaSemana.SABADO
+    );
   }
 
   private limparFormulario(): void {

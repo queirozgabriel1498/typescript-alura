@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "option": "watch",
+      "options": {
+        "env": {
+          "NODE_ENV": "development",
+        },
+      },
+      "isBackground":true,
+      "problemMatcher": ["$tsc-watch"],
+      "group": "build",
+      "label": "Poli 3.0 TS errors",
+      "runOptions": {
+        "runOn": "folderOpen",
+        "reevaluateOnRerun": true
+      }
+    }
+  ]
+}

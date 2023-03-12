@@ -3,6 +3,19 @@ import { View } from "./view.js";
 
 export class NegociacoesView extends View<Negociacoes> {
   protected template(negociacoes: Negociacoes): string {
+    const negociacoes_list = negociacoes
+      .lista()
+      .map((negociacao) => {
+        return `
+        <tr>
+          <td>${this.formatDate(negociacao.data)}</td>
+          <td>${negociacao.quantidade}</td>
+          <td>${negociacao.valor}</td>
+        </tr>
+      `;
+      })
+      .join("");
+
     return `
       <table class="table table-hover table-bordered">
         <thead>
@@ -13,18 +26,7 @@ export class NegociacoesView extends View<Negociacoes> {
           </tr>
         </thead>
         <tbody>
-          ${negociacoes
-            .lista()
-            .map((negociacao) => {
-              return `
-                <tr>
-                  <td>${this.formatDate(negociacao.data)}</td>
-                  <td>${negociacao.quantidade}</td>
-                  <td>${negociacao.valor}</td>
-                </tr>
-              `;
-            })
-            .join("")}
+          ${negociacoes_list}
         </tbody>
       </table>
     `;
